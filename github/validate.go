@@ -21,6 +21,7 @@ func IsValidPayload(secret, headerHash string, payload []byte) bool {
 // returning the hash as a hexadecimal string
 func HashPayload(secret string, playloadBody []byte) string {
 	hm := hmac.New(sha1.New, []byte(secret))
-	sum := hm.Sum(playloadBody)
+	hm.Write(playloadBody)
+	sum := hm.Sum(nil)
 	return fmt.Sprintf("%x", sum)
 }
