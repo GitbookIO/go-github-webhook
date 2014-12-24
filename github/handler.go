@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 type WebhookHandler func(eventname string, payload *GitHubPayload, req *http.Request) error
@@ -35,6 +36,19 @@ func Handler(secret string, fn WebhookHandler) http.Handler {
 			return
 		}
 
+		// Ensure secret is a sha1 hash
+		signature_parts := strings.SplitN(signature, "=", 2)
+		if len(signature_parts) != 2 {
+			_fail(fmt.Errorf("Signature: '%s' does not contain two parts (hash type and hash)", signature))
+			return
+		}
+		signature_type := signature_parts[0]
+		signature_hash := signature_parts[1]
+		if signature_type != "sha1" {
+			_fail(fmt.Errorf("Signature should be a 'sha1' hash not '%s'", signature_type))
+			return
+		}
+
 		body, err := ioutil.ReadAll(req.Body)
 		if err != nil {
 			_fail(err)
@@ -43,7 +57,7 @@ func Handler(secret string, fn WebhookHandler) http.Handler {
 
 		// Check that payload came from github
 		// skip check if empty secret provided
-		if secret != "" && !IsValidPayload(secret, signature, body) {
+		if secret != "" && !IsValidPayload(secret, signature_hash, body) {
 			_fail(fmt.Errorf("Payload did not come from GitHub"))
 			return
 		}
