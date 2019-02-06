@@ -66,10 +66,52 @@ type GitHubPayload struct {
 	Forced     bool           `json:"forced"`
 	Compare    string         `json:"compare"`
 	Pusher     GitHubPerson   `json:"pusher"`
+
+	Action       string                  `json:"action"`
+	CheckSuite   GitHubV3CheckSuite      `json:"check_suite"`
+	Installation GitHubV3AppInstallation `json:"installation"`
+	Sender       GitHubV3Entity          `json:"sender"`
+	Organization GitHubV3Entity          `json:"organization"`
 }
 
 type PayloadPong struct {
 	Ok    bool   `json:"ok"`
 	Event string `json:"event"`
 	Error string `json:"error,omitempty"`
+}
+
+type GitHubV3AppInstallation struct {
+	ID     int    `json:"id"`
+	NodeID string `json:"node_id"`
+}
+
+type GitHubV3Entity struct {
+	ID                int    `json:"id"`
+	NodeID            string `json:"node_id"`
+	Type              string `json:"type"`
+	Login             string `json:"login"`
+	SideAdmin         bool   `json:"site_admin"`
+	AvatarURL         string `json:"avatar_url"`
+	GravatarID        string `json:"gravatar_id"`
+	URL               string `json:"url"`
+	HTLMURL           string `json:"html_url"`
+	FollowersURL      string `json:"followers_url"`
+	FollowingURL      string `json:"following_url"`
+	GistsURL          string `json:"gists_url"`
+	StarredURL        string `json:"starred_url"`
+	SubscriptionURL   string `json:"subscriptions_url"`
+	OrganizationURL   string `json:"organizations_url"`
+	ReposURL          string `json:"repos_url"`
+	EventsURL         string `json:"events_url"`
+	ReceivedEventsURL string `json:"received_events_url"`
+}
+
+type GitHubV3CheckSuite struct {
+	ID                 int    `json:"id"`
+	NodeID             string `json:"node_id"`
+	HeadBranch         string `json:"head_branch"`
+	HeadSHA            string `json:"head_sha"`
+	Status             string `json:"status"`
+	LastCheckRunsCount int    `json:"latest_check_runs_count"`
+	CheckRunsURL       string `json:"check_runs_url"`
 }
