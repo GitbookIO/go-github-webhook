@@ -106,12 +106,43 @@ type GitHubV3Entity struct {
 	ReceivedEventsURL string `json:"received_events_url"`
 }
 
+type GitHubV3PR struct {
+}
+
+type GitHubV3App struct {
+	ID          int             `json:"id"`
+	NodeID      string          `json:"node_id"`
+	Name        string          `json:"name"`
+	Description string          `json:"description"`
+	ExternalURL string          `json:"external_url"`
+	HTLMURL     string          `json:"html_url"`
+	CreatedAt   GitHubTimestamp `json:"created_at"`
+	UpdatedAt   GitHubTimestamp `json:"updated_at"`
+}
+
+type GitHubV3Commit struct {
+	ID        int             `json:"id"`
+	TreeID    string          `json:"tree_id"`
+	Message   string          `json:"message"`
+	Timestamp GitHubTimestamp `json:"timestamp"`
+	Committer GitHubPerson    `json:"committer"`
+	Author    GitHubPerson    `json:"author"`
+}
+
 type GitHubV3CheckSuite struct {
-	ID                 int    `json:"id"`
-	NodeID             string `json:"node_id"`
-	HeadBranch         string `json:"head_branch"`
-	HeadSHA            string `json:"head_sha"`
-	Status             string `json:"status"`
-	LastCheckRunsCount int    `json:"latest_check_runs_count"`
-	CheckRunsURL       string `json:"check_runs_url"`
+	ID                 int             `json:"id"`
+	NodeID             string          `json:"node_id"`
+	CreatedAt          GitHubTimestamp `json:"created_at"`
+	UpdatedAt          GitHubTimestamp `json:"updated_at"`
+	HeadBranch         string          `json:"head_branch"`
+	HeadSHA            string          `json:"head_sha"`
+	HeadCommit         GitHubV3Commit  `json:"head_commit"`
+	Status             string          `json:"status"`
+	LastCheckRunsCount int             `json:"latest_check_runs_count"`
+	CheckRunsURL       string          `json:"check_runs_url"`
+	URL                string          `json:"url"`
+	Conclusion         string          `json:"conclusion"`
+	PullRequests       []GitHubV3PR    `json:"pull_requests"`
+	App                GitHubV3App     `json:"app"`
+	Repository         GitHubRepo      `json:"repository"`
 }
